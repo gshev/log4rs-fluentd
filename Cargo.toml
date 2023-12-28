@@ -1,20 +1,20 @@
 [package]
 name = "log4rs-fluentd"
-version = "0.3.0"
+version = "0.3.1"
 readme = "README.md"
 license = "MIT/Apache-2.0"
-homepage = "https://github.com/Pzixel/log4rs-fluentd"
-repository = "https://github.com/Pzixel/log4rs-fluentd"
+homepage = "https://github.com/gshev/log4rs-fluentd"
+repository = "https://github.com/gshev/log4rs-fluentd"
 keywords = ["logger", "log", "logging", "fluentd"]
-authors = ["Psilon <pzixel@gmail.com, François Dubois <fdubois@devolutions.net>"]
+authors = ["Psilon <pzixel@gmail.com>, François Dubois <fdubois@devolutions.net>"]
 description = "Fluentd appender for log4rs"
 
 [dependencies]
-log = { version = "0.4", default_features = false, features = ["serde"] }
-log4rs = { version = "0.12", features = ["simple_writer"] }
-poston = "0.7.0"
-serde = "1.0"
-serde_derive = "1.0"
+log = { version = "0.4.20", default_features = false, features = ["serde"] }
+log4rs = { version = "1.2.0", features = ["simple_writer"] }
+poston = "0.7.6"
+serde = "1.0.193"
+serde_derive = "1.0.193"
 
 [dev-dependencies]
-tempfile = "3.0"
+tempfile = "3.9.0"

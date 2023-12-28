@@ -1,5 +1,6 @@
 use log::Record;
 use log4rs;
+use log4rs::append::Append;
 use log4rs::encode::writer::simple::SimpleWriter;
 use poston::client::{Client, Settings, WorkerPool};
 use std::error::Error;
@@ -45,7 +46,7 @@ impl FluentdAppender {
 }
 
 impl ::log4rs::append::Append for FluentdAppender {
-    fn append(&self, record: &Record) -> Result<(), Box<dyn Error + Sync + Send>> {
+    fn append(&self, record: &Record) -> anyhow::Result<()> {
         let mut writer = SimpleWriter(Vec::<u8>::new());
         self.encoder.encode(&mut writer, record)?;
 
@@ -128,11 +129,15 @@ struct FluentdAppenderConfig {
 
 struct FluentdAppenderDeserializer;
 
-impl log4rs::file::Deserialize for FluentdAppenderDeserializer {
+impl log4rs::config::Deserialize for FluentdAppenderDeserializer {
     type Trait = dyn log4rs::append::Append;
     type Config = FluentdAppenderConfig;
 
-    fn deserialize(&self, config: Self::Config, deserializers: &log4rs::file::Deserializers) -> Result<Box<Self::Trait>, Box<dyn Error + Sync + Send>> {
+    fn deserialize(
+        &self,
+        config: Self::Config,
+        deserializers: &log4rs::config::Deserializers
+    ) -> anyhow::Result<Box<dyn Append>> {
         let mut builder = FluentdAppender::builder();
 
         if let Some(encoder) = config.encoder {
@@ -147,6 +152,6 @@ impl log4rs::file::Deserialize for FluentdAppenderDeserializer {
     }
 }
 
-pub fn register(deserializers: &mut log4rs::file::Deserializers) {
+pub fn register(deserializers: &mut log4rs::config::Deserializers) {
     deserializers.insert("fluentd", FluentdAppenderDeserializer);
 }
